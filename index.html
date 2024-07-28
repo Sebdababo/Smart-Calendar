@@ -3,25 +3,30 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Simple Local Calendar</title>
+    <title>Dark Mode Calendar</title>
     <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&display=swap" rel="stylesheet">
 </head>
 <body>
-    <div id="calendar-container">
-        <div id="calendar-header">
-            <button id="prev-month">Previous</button>
-            <h2 id="month-year"></h2>
-            <button id="next-month">Next</button>
+    <div id="app-container">
+        <div id="calendar-container">
+            <div id="calendar-header">
+                <button id="prev-month" class="nav-button">&#10094;</button>
+                <h2 id="month-year"></h2>
+                <button id="next-month" class="nav-button">&#10095;</button>
+            </div>
+            <div id="weekdays"></div>
+            <div id="calendar-grid"></div>
         </div>
-        <div id="calendar-grid"></div>
-    </div>
-    <div id="event-form">
-        <h3>Add/Edit Event</h3>
-        <input type="text" id="event-title" placeholder="Event Title">
-        <input type="date" id="event-date">
-        <input type="time" id="event-time">
-        <textarea id="event-description" placeholder="Event Description"></textarea>
-        <button id="save-event">Save Event</button>
+        <div id="event-panel">
+            <h3>Add/Edit Event</h3>
+            <input type="text" id="event-title" placeholder="Event Title">
+            <input type="date" id="event-date">
+            <input type="time" id="event-time">
+            <textarea id="event-description" placeholder="Event Description"></textarea>
+            <button id="save-event">Save Event</button>
+            <button id="delete-event" style="display: none;">Delete Event</button>
+        </div>
     </div>
     <script src="script.js"></script>
 </body>
