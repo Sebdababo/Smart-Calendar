@@ -1,13 +1,46 @@
-/* General body styling */
+body {
+    font-family: Arial, sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    height: 100vh;
+    margin: 0;
+    padding: 20px;
+    box-sizing: border-box;
+}
 
-/* Styling for calendar container */
+#calendar-container {
+    width: 60%;
+    margin-right: 20px;
+}
 
-/* Header styling */
+#calendar-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+}
 
-/* Grid styling for calendar days */
+#calendar-grid {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 5px;
+}
 
-/* Individual day styling */
+.calendar-day {
+    border: 1px solid #ccc;
+    padding: 5px;
+    min-height: 80px;
+    overflow-y: auto;
+}
 
-/* Event form styling */
+#event-form {
+    width: 30%;
+}
 
-/* General input, textarea, button styling */
+input, textarea, button {
+    display: block;
+    width: 100%;
+    margin-bottom: 10px;
+    padding: 5px;
+}

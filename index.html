@@ -1,11 +1,28 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <!-- Metadata and linking styles -->
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simple Local Calendar</title>
+    <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <!-- Calendar container with navigation buttons and grid -->
-    <!-- Event form for adding/editing events -->
-    <!-- Linking the script -->
+    <div id="calendar-container">
+        <div id="calendar-header">
+            <button id="prev-month">Previous</button>
+            <h2 id="month-year"></h2>
+            <button id="next-month">Next</button>
+        </div>
+        <div id="calendar-grid"></div>
+    </div>
+    <div id="event-form">
+        <h3>Add/Edit Event</h3>
+        <input type="text" id="event-title" placeholder="Event Title">
+        <input type="date" id="event-date">
+        <input type="time" id="event-time">
+        <textarea id="event-description" placeholder="Event Description"></textarea>
+        <button id="save-event">Save Event</button>
+    </div>
+    <script src="script.js"></script>
 </body>
 </html>
