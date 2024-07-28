@@ -30,11 +30,14 @@ function renderCalendar() {
         const dayElement = document.createElement('div');
         dayElement.classList.add('calendar-day');
         dayElement.textContent = day;
+        dayElement.setAttribute('role', 'gridcell');
+        dayElement.setAttribute('tabindex', '0');
 
         const dateString = formatDate(new Date(currentDate.getFullYear(), currentDate.getMonth(), day));
         if (events[dateString]) {
             const eventDot = document.createElement('div');
             eventDot.classList.add('event-dot');
+            eventDot.setAttribute('title', 'Event scheduled');
             dayElement.appendChild(eventDot);
         }
 
@@ -43,29 +46,58 @@ function renderCalendar() {
         }
 
         dayElement.addEventListener('click', () => selectDate(dateString));
+        dayElement.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter' || e.key === ' ') {
+                e.preventDefault();
+                selectDate(dateString);
+            }
+        });
         calendarGrid.appendChild(dayElement);
     }
+
+    updateSelectedDay();
 }
 
 function selectDate(dateString) {
     selectedDate = dateString;
-    document.getElementById('event-date').value = dateString;
+    document.getElementById('event-date').valueAsDate = new Date(dateString);
     const event = events[dateString];
     if (event) {
         document.getElementById('event-title').value = event.title;
         document.getElementById('event-time').value = event.time;
         document.getElementById('event-description').value = event.description;
-        document.getElementById('delete-event').style.display = 'block';
+        document.getElementById('delete-event').style.display = 'inline-block';
     } else {
         document.getElementById('event-title').value = '';
         document.getElementById('event-time').value = '';
         document.getElementById('event-description').value = '';
         document.getElementById('delete-event').style.display = 'none';
     }
+    updateSelectedDay();
 }
 
 function formatDate(date) {
     return date.toISOString().split('T')[0];
+}
+
+function updateSelectedDay() {
+    const days = document.querySelectorAll('.calendar-day');
+    days.forEach(day => {
+        day.classList.remove('selected');
+        const dayDate = new Date(currentDate.getFullYear(), currentDate.getMonth(), parseInt(day.textContent));
+        if (formatDate(dayDate) === selectedDate) {
+            day.classList.add('selected');
+        }
+    });
+}
+
+function showError(message) {
+    const errorElement = document.getElementById('error-message');
+    errorElement.textContent = message;
+    errorElement.style.display = 'block';
+    setTimeout(() => {
+        errorElement.style.display = 'none';
+    }, 3000);
 }
 
 document.getElementById('prev-month').addEventListener('click', () => {
@@ -79,17 +111,25 @@ document.getElementById('next-month').addEventListener('click', () => {
 });
 
 document.getElementById('save-event').addEventListener('click', () => {
-    const title = document.getElementById('event-title').value;
+    const title = document.getElementById('event-title').value.trim();
     const date = document.getElementById('event-date').value;
     const time = document.getElementById('event-time').value;
-    const description = document.getElementById('event-description').value;
+    const description = document.getElementById('event-description').value.trim();
 
-    if (title && date) {
-        events[date] = { title, time, description };
-        localStorage.setItem('calendarEvents', JSON.stringify(events));
-        renderCalendar();
-        selectDate(date);
+    if (!title) {
+        showError('Please enter an event title.');
+        return;
     }
+
+    if (!date) {
+        showError('Please select a date.');
+        return;
+    }
+
+    events[date] = { title, time, description };
+    localStorage.setItem('calendarEvents', JSON.stringify(events));
+    renderCalendar();
+    selectDate(date);
 });
 
 document.getElementById('delete-event').addEventListener('click', () => {
@@ -99,6 +139,18 @@ document.getElementById('delete-event').addEventListener('click', () => {
         renderCalendar();
         selectDate(selectedDate);
     }
+});
+
+document.getElementById('event-date').addEventListener('input', (e) => {
+    selectedDate = e.target.value;
+    updateSelectedDay();
+});
+
+document.addEventListener('DOMContentLoaded', () => {
+    const today = new Date();
+    selectedDate = formatDate(today);
+    document.getElementById('event-date').valueAsDate = today;
+    renderCalendar();
 });
 
 renderCalendar();
