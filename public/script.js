@@ -1,5 +1,5 @@
 let currentDate = new Date();
-let events = JSON.parse(localStorage.getItem('calendarEvents')) || {};
+let events = {};
 let selectedDate = null;
 
 function renderCalendar() {
@@ -128,7 +128,7 @@ document.getElementById('save-event').addEventListener('click', () => {
     }
 
     events[date] = { title, time, description };
-    localStorage.setItem('calendarEvents', JSON.stringify(events));
+    saveEvents();
     renderCalendar();
     selectDate(date);
 });
@@ -136,7 +136,7 @@ document.getElementById('save-event').addEventListener('click', () => {
 document.getElementById('delete-event').addEventListener('click', () => {
     if (selectedDate && events[selectedDate]) {
         delete events[selectedDate];
-        localStorage.setItem('calendarEvents', JSON.stringify(events));
+        saveEvents();
         renderCalendar();
         selectDate(selectedDate);
     }
@@ -147,11 +147,32 @@ document.getElementById('event-date').addEventListener('input', (e) => {
     updateSelectedDay();
 });
 
+function loadEvents() {
+    fetch('/api/events')
+        .then(response => response.json())
+        .then(data => {
+            events = data;
+            renderCalendar();
+        })
+        .catch(error => console.error('Error loading events:', error));
+}
+
+function saveEvents() {
+    fetch('/api/events', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(events),
+    })
+    .catch(error => console.error('Error saving events:', error));
+}
+
 document.addEventListener('DOMContentLoaded', () => {
     const today = new Date();
     selectedDate = formatDate(today);
     document.getElementById('event-date').valueAsDate = today;
-    renderCalendar();
+    loadEvents();
 });
 
 renderCalendar();

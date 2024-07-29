@@ -12,17 +12,17 @@ body {
 
 #app-container {
     display: flex;
-    width: 90%;
-    max-width: 1200px;
+    width: 100%;
+    height: 100vh;
     background-color: #2a2a2a;
-    border-radius: 10px;
     overflow: hidden;
-    box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
 }
 
 #calendar-container {
     flex: 2;
     padding: 20px;
+    display: flex;
+    flex-direction: column;
 }
 
 #calendar-header {
@@ -82,16 +82,18 @@ body {
     display: grid;
     grid-template-columns: repeat(7, 1fr);
     gap: 5px;
+    flex-grow: 1;
 }
 
 .calendar-day {
     background-color: #3a3a3a;
     border-radius: 5px;
     padding: 10px;
-    min-height: 80px;
     cursor: pointer;
     transition: background-color 0.3s;
     position: relative;
+    display: flex;
+    flex-direction: column;
 }
 
 .calendar-day:hover {
@@ -99,7 +101,7 @@ body {
 }
 
 .calendar-day.today {
-    border: 2px solid #4CAF50;
+    box-shadow: inset 0 0 0 2px #4CAF50;
 }
 
 .calendar-day.selected {
@@ -124,6 +126,7 @@ body {
     border-left: 1px solid #4a4a4a;
     display: flex;
     flex-direction: column;
+    overflow-y: auto;
 }
 
 #event-panel h3 {
@@ -131,13 +134,19 @@ body {
     margin-bottom: 20px;
 }
 
+#event-form {
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+}
+
 label {
     display: block;
     margin-bottom: 5px;
 }
 
-input, textarea, button {
-    width: 100%;
+input, textarea {
+    width: calc(100% - 20px);
     padding: 10px;
     margin-bottom: 15px;
     border: none;
@@ -150,33 +159,10 @@ input:focus, textarea:focus {
     outline: 2px solid #4CAF50;
 }
 
-input[type="date"], input[type="time"] {
-    color: #fff;
-}
-
 textarea {
-    resize: none;
-    height: 100px;
-    overflow-y: auto;
-}
-
-textarea::-webkit-scrollbar {
-    width: 8px;
-}
-
-textarea::-webkit-scrollbar-track {
-    background: #2a2a2a;
-}
-
-textarea::-webkit-scrollbar-thumb {
-    background-color: #4a4a4a;
-    border-radius: 4px;
-}
-
-#event-panel form {
-    display: flex;
-    flex-direction: column;
-    flex-grow: 1;
+    resize: vertical;
+    min-height: 100px;
+    max-height: 200px;
 }
 
 .button-group {
@@ -187,7 +173,11 @@ textarea::-webkit-scrollbar-thumb {
 
 button {
     flex: 1;
+    padding: 10px;
     background-color: #4CAF50;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
     cursor: pointer;
     transition: background-color 0.3s;
     font-weight: bold;
