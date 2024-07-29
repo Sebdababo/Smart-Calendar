@@ -128,6 +128,43 @@ body {
 .event-dot-personal { background-color: #FFC107; }
 .event-dot-important { background-color: #F44336; }
 
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 1;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0,0,0,0.4);
+}
+
+.modal-content {
+    background-color: #3a3a3a;
+    margin: 15% auto;
+    padding: 20px;
+    border: 1px solid #888;
+    width: 80%;
+    max-width: 600px;
+    border-radius: 5px;
+}
+
+.close {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.close:hover,
+.close:focus {
+    color: #fff;
+    text-decoration: none;
+    cursor: pointer;
+}
+
 #event-panel {
     flex: 1;
     padding: 20px;
@@ -138,11 +175,19 @@ body {
     overflow-y: auto;
 }
 
+#event-time-start,
+#event-time-end,
 #event-description {
+    width: calc(100% - 20px);
+    padding: 10px;
+    margin-bottom: 15px;
+    border: none;
+    border-radius: 5px;
+    background-color: #2a2a2a;
+    color: #fff;
     resize: vertical;
-    min-height: 100px;
-    max-height: 200px;
-    overflow-y: auto;
+    min-height: 50px;
+    max-height: 150px;
 }
 
 #event-panel h3 {

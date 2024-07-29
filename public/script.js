@@ -46,7 +46,7 @@ function renderCalendar() {
             dayElement.classList.add('today');
         }
 
-        dayElement.addEventListener('click', () => showDayEvents(dateString));
+        dayElement.addEventListener('dblclick', () => showDayEvents(dateString));
         dayElement.addEventListener('keydown', (e) => {
             if (e.key === 'Enter' || e.key === ' ') {
                 e.preventDefault();
@@ -58,19 +58,12 @@ function renderCalendar() {
 }
 
 function showDayEvents(dateString) {
-    const appContainer = document.getElementById('app-container');
-    appContainer.innerHTML = '';
+    const modal = document.getElementById('day-events-modal');
+    const modalDate = document.getElementById('modal-date');
+    const modalEventsList = document.getElementById('modal-events-list');
 
-    const dayEventsPage = document.createElement('div');
-    dayEventsPage.id = 'day-events-page';
-    dayEventsPage.innerHTML = `
-        <h2>${formatDateForDisplay(dateString)}</h2>
-        <div id="day-events-list"></div>
-        <button id="back-to-calendar">Back to Calendar</button>
-    `;
-    appContainer.appendChild(dayEventsPage);
-
-    const dayEventsList = document.getElementById('day-events-list');
+    modalDate.textContent = formatDateForDisplay(dateString);
+    modalEventsList.innerHTML = '';
 
     if (events[dateString] && events[dateString].length > 0) {
         events[dateString].forEach((event, index) => {
@@ -84,20 +77,19 @@ function showDayEvents(dateString) {
                 <p>${event.description}</p>
                 <button class="edit-event" data-index="${index}">Edit</button>
             `;
-            dayEventsList.appendChild(eventElement);
+            modalEventsList.appendChild(eventElement);
         });
     } else {
-        dayEventsList.innerHTML = '<p>No events scheduled for this day.</p>';
+        modalEventsList.innerHTML = '<p>No events scheduled for this day.</p>';
     }
 
-    document.getElementById('back-to-calendar').addEventListener('click', () => {
-        renderCalendar();
-    });
+    modal.style.display = 'block';
 
     document.querySelectorAll('.edit-event').forEach(button => {
         button.addEventListener('click', () => {
             const index = button.getAttribute('data-index');
             editEvent(dateString, parseInt(index));
+            modal.style.display = 'none';
         });
     });
 }
@@ -105,7 +97,6 @@ function showDayEvents(dateString) {
 function editEvent(dateString, index) {
     selectedDate = dateString;
     const event = events[dateString][index];
-    document.getElementById('event-date').value = formatDateForInput(dateString);
     document.getElementById('event-title').value = event.title;
     document.getElementById('event-time-start').value = event.timeStart || '';
     document.getElementById('event-time-end').value = event.timeEnd || '';
@@ -152,9 +143,8 @@ document.getElementById('next-month').addEventListener('click', () => {
 
 document.getElementById('save-event').addEventListener('click', () => {
     const title = document.getElementById('event-title').value.trim();
-    const date = document.getElementById('event-date').value;
-    const timeStart = document.getElementById('event-time-start').value;
-    const timeEnd = document.getElementById('event-time-end').value;
+    const timeStart = document.getElementById('event-time-start').value.trim();
+    const timeEnd = document.getElementById('event-time-end').value.trim();
     const category = document.getElementById('event-category').value;
     const description = document.getElementById('event-description').value.trim();
 
@@ -163,20 +153,19 @@ document.getElementById('save-event').addEventListener('click', () => {
         return;
     }
 
-    if (!date) {
-        showError('Please select a date.');
+    if (!selectedDate) {
+        showError('Please select a date by double-clicking a day in the calendar.');
         return;
     }
 
-    if (!events[date]) {
-        events[date] = [];
+    if (!events[selectedDate]) {
+        events[selectedDate] = [];
     }
-    events[date].push({ title, timeStart, timeEnd, category, description });
+    events[selectedDate].push({ title, timeStart, timeEnd, category, description });
     saveEvents();
     renderCalendar();
     clearForm();
 });
-
 document.getElementById('delete-event').addEventListener('click', () => {
     if (selectedDate && events[selectedDate]) {
         events[selectedDate] = events[selectedDate].filter(event => event.title !== document.getElementById('event-title').value);
