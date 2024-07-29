@@ -78,6 +78,11 @@ body {
     color: #888;
 }
 
+#event-category {
+    background-color: #2a2a2a;
+    color: #fff;
+}
+
 #calendar-grid {
     display: grid;
     grid-template-columns: repeat(7, 1fr);
@@ -110,14 +115,18 @@ body {
 }
 
 .event-dot {
-    width: 8px;
-    height: 8px;
-    background-color: #4CAF50;
+    width: 16px;
+    height: 16px;
     border-radius: 50%;
     position: absolute;
     bottom: 5px;
     right: 5px;
 }
+
+.event-dot-default { background-color: #4CAF50; }
+.event-dot-work { background-color: #2196F3; }
+.event-dot-personal { background-color: #FFC107; }
+.event-dot-important { background-color: #F44336; }
 
 #event-panel {
     flex: 1;
@@ -145,6 +154,21 @@ body {
     display: flex;
     flex-direction: column;
     flex-grow: 1;
+}
+
+#day-events-page {
+    padding: 20px;
+}
+
+.day-event {
+    background-color: #3a3a3a;
+    border-radius: 5px;
+    padding: 15px;
+    margin-bottom: 15px;
+}
+
+#back-to-calendar {
+    margin-top: 20px;
 }
 
 label {

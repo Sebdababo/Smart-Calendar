@@ -12,7 +12,7 @@ app.use(express.static('public'));
 const dataFile = path.join(__dirname, 'data', 'events.json');
 
 if (!fs.existsSync(path.dirname(dataFile))) {
-    fs.mkdirSync(path.dirname(dataFile));
+    fs.mkdirSync(path.dirname(dataFile), { recursive: true });
 }
 
 if (!fs.existsSync(dataFile)) {
