@@ -30,11 +30,16 @@
                 <label for="event-time-start">Start Time:</label>
                 <textarea id="event-time-start"></textarea>
                 
-                <label for="event-time-end">End Time (optional):</label>
+                <label for="event-time-end">End Time:</label>
                 <textarea id="event-time-end"></textarea>
                 
                 <label for="event-category">Category:</label>
-                <textarea id="event-category"></textarea>
+                    <select id="event-category">
+                        <option value="default">Default</option>
+                        <option value="work">Work</option>
+                        <option value="personal">Personal</option>
+                        <option value="important">Important</option>
+                    </select>
                 
                 <label for="event-description">Description:</label>
                 <textarea id="event-description"></textarea>
