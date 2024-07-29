@@ -60,7 +60,8 @@ function renderCalendar() {
 
 function selectDate(dateString) {
     selectedDate = dateString;
-    document.getElementById('event-date').valueAsDate = new Date(dateString);
+    const localDate = new Date(dateString + 'T00:00:00');
+    document.getElementById('event-date').valueAsDate = localDate;
     const event = events[dateString];
     if (event) {
         document.getElementById('event-title').value = event.title;
