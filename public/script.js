@@ -6,7 +6,7 @@ function renderCalendar() {
     const monthYear = document.getElementById('month-year');
     const calendarGrid = document.getElementById('calendar-grid');
     const weekdaysContainer = document.getElementById('weekdays');
-    
+
     monthYear.textContent = currentDate.toLocaleString('default', { month: 'long', year: 'numeric' });
     calendarGrid.innerHTML = '';
     weekdaysContainer.innerHTML = '';
@@ -35,26 +35,58 @@ function renderCalendar() {
 
         const dateString = formatDate(new Date(currentDate.getFullYear(), currentDate.getMonth(), day));
         if (events[dateString] && events[dateString].length > 0) {
-            const eventDot = document.createElement('div');
-            eventDot.classList.add('event-dot');
-            eventDot.classList.add(`event-dot-${events[dateString][0].category || 'default'}`);
-            eventDot.setAttribute('title', 'Events scheduled');
-            dayElement.appendChild(eventDot);
+            const eventDotsContainer = document.createElement('div');
+            eventDotsContainer.classList.add('event-dots-container');
+
+            events[dateString].forEach(event => {
+                const eventDot = document.createElement('div');
+                eventDot.classList.add('event-dot');
+                eventDot.classList.add(`event-dot-${event.category || 'default'}`);
+                eventDot.setAttribute('title', event.title);
+                eventDotsContainer.appendChild(eventDot);
+            });
+
+            dayElement.appendChild(eventDotsContainer);
         }
 
         if (day === new Date().getDate() && currentDate.getMonth() === new Date().getMonth() && currentDate.getFullYear() === new Date().getFullYear()) {
             dayElement.classList.add('today');
         }
 
+        dayElement.addEventListener('click', () => selectDate(dateString));
         dayElement.addEventListener('dblclick', () => showDayEvents(dateString));
         dayElement.addEventListener('keydown', (e) => {
             if (e.key === 'Enter' || e.key === ' ') {
                 e.preventDefault();
+                selectDate(dateString);
                 showDayEvents(dateString);
             }
         });
+
         calendarGrid.appendChild(dayElement);
     }
+
+    updateSelectedDay();
+}
+
+function selectDate(dateString) {
+    selectedDate = dateString;
+    document.getElementById('event-date').value = dateString;
+    const event = events[dateString];
+    if (event) {
+        document.getElementById('event-title').value = event.title;
+        document.getElementById('event-time-start').value = event.time;
+        document.getElementById('event-time-end').value = event.time;
+        document.getElementById('event-description').value = event.description;
+        document.getElementById('delete-event').style.display = 'inline-block';
+    } else {
+        document.getElementById('event-title').value = '';
+        document.getElementById('event-time-start').value = '';
+        document.getElementById('event-time-end').value = '';
+        document.getElementById('event-description').value = '';
+        document.getElementById('delete-event').style.display = 'none';
+    }
+    updateSelectedDay();
 }
 
 function showDayEvents(dateString) {
@@ -112,6 +144,17 @@ function formatDate(date) {
     return `${year}-${month}-${day}`;
 }
 
+function updateSelectedDay() {
+    const days = document.querySelectorAll('.calendar-day');
+    days.forEach(day => {
+        day.classList.remove('selected');
+        const dayDate = new Date(currentDate.getFullYear(), currentDate.getMonth(), parseInt(day.textContent));
+        if (formatDate(dayDate) === selectedDate) {
+            day.classList.add('selected');
+        }
+    });
+}
+
 function formatDateForInput(dateString) {
     return dateString;
 }
@@ -166,6 +209,7 @@ document.getElementById('save-event').addEventListener('click', () => {
     renderCalendar();
     clearForm();
 });
+
 document.getElementById('delete-event').addEventListener('click', () => {
     if (selectedDate && events[selectedDate]) {
         events[selectedDate] = events[selectedDate].filter(event => event.title !== document.getElementById('event-title').value);
@@ -213,7 +257,7 @@ function saveEvents(date, title, timeStart, timeEnd, category, description) {
         },
         body: JSON.stringify(events),
     })
-    .catch(error => console.error('Error saving events:', error));
+        .catch(error => console.error('Error saving events:', error));
 }
 
 document.addEventListener('DOMContentLoaded', () => {
