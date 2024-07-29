@@ -129,6 +129,13 @@ body {
     overflow-y: auto;
 }
 
+#event-description {
+    resize: vertical;
+    min-height: 100px;
+    max-height: 200px;
+    overflow-y: auto;
+}
+
 #event-panel h3 {
     margin-top: 0;
     margin-bottom: 20px;

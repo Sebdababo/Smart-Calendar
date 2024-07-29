@@ -11,7 +11,7 @@ function renderCalendar() {
     calendarGrid.innerHTML = '';
     weekdaysContainer.innerHTML = '';
 
-    const weekdays = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+    const weekdays = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
     weekdays.forEach(day => {
         const dayElement = document.createElement('div');
         dayElement.classList.add('weekday');
@@ -22,7 +22,7 @@ function renderCalendar() {
     const firstDay = new Date(currentDate.getFullYear(), currentDate.getMonth(), 1);
     const lastDay = new Date(currentDate.getFullYear(), currentDate.getMonth() + 1, 0);
 
-    for (let i = 0; i < firstDay.getDay(); i++) {
+    for (let i = 0; i < (firstDay.getDay() + 6) % 7; i++) {
         calendarGrid.appendChild(document.createElement('div'));
     }
 
@@ -60,8 +60,7 @@ function renderCalendar() {
 
 function selectDate(dateString) {
     selectedDate = dateString;
-    const localDate = new Date(dateString + 'T00:00:00');
-    document.getElementById('event-date').valueAsDate = localDate;
+    document.getElementById('event-date').value = dateString;
     const event = events[dateString];
     if (event) {
         document.getElementById('event-title').value = event.title;
@@ -78,7 +77,10 @@ function selectDate(dateString) {
 }
 
 function formatDate(date) {
-    return date.toISOString().split('T')[0];
+    const day = String(date.getDate()).padStart(2, '0');
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const year = date.getFullYear();
+    return `${day}/${month}/${year}`;
 }
 
 function updateSelectedDay() {
@@ -171,7 +173,7 @@ function saveEvents() {
 document.addEventListener('DOMContentLoaded', () => {
     const today = new Date();
     selectedDate = formatDate(today);
-    document.getElementById('event-date').valueAsDate = today;
+    document.getElementById('event-date').value = selectedDate;
     loadEvents();
 });
 
