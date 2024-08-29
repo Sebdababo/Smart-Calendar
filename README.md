@@ -3,6 +3,9 @@
 ## Overview
 The Smart Calendar application is a dynamic web-based calendar tool designed to help users manage their schedules efficiently. It allows users to add, edit, and remove events, providing a clear visual representation of their daily, weekly, and monthly schedules.
 
+## Try it out!
+[SebDaBaBo's Smart Calendar](https://sebdababo.github.io/Smart-Calendar/public/)
+
 ## Features
 - **Event Management**: Create, edit, and delete events.
 - **Category Support**: Assign categories to events for better organization.
@@ -48,3 +51,6 @@ The Smart Calendar application is a dynamic web-based calendar tool designed to 
 
 ## Closing the Application
 - Stop the server by pressing `Ctrl + C` in the terminal where the server is running.
+
+## Example Usage
+![Smart Calendar Program v1 0](https://github.com/user-attachments/assets/6225eb2e-12ae-44ae-a929-21471b33f2c1)
